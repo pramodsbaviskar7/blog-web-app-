@@ -45,9 +45,15 @@ class PostUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
 		return False
 
 
-class PostDeleteView(LoginRequiredMixin,UserPassesTestMixin,DeleteView):
-	model=Post
-	success_url='/'
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    success_url = '/'
+
+    def test_func(self):
+        post = self.get_object()
+        if self.request.user == post.author:
+            return True
+        return False
 
 class UserPostListView(ListView):
 	model=Post
